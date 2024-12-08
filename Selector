@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Nombres al Azar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        input, button, textarea {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .options-list {
+            margin-top: 20px;
+            text-align: left;
+            list-style: none;
+            padding: 0;
+        }
+        .options-list li {
+            margin: 5px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .options-list.hidden {
+            display: none;
+        }
+        .result {
+            margin: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Selector de Nombres al Azar</h1>
+        <textarea id="options" rows="5" cols="40" placeholder="Introduce las opciones separadas por comas..."></textarea><br>
+        <button onclick="pickRandom()">Seleccionar</button>
+        <div class="result" id="result">El resultado aparecerá aquí</div>
+        <ul class="options-list" id="optionsList"></ul>
+    </div>
+
+    <script>
+        function initializeOptions() {
+            const input = document.getElementById("options").value;
+            const optionsArray = input.split(',').map(option => option.trim()).filter(option => option !== "");
+            const optionsList = document.getElementById("optionsList");
+            optionsList.innerHTML = "";
+            optionsArray.forEach(option => {
+                const li = document.createElement("li");
+                li.textContent = option;
+                optionsList.appendChild(li);
+            });
+        }
+
+        function pickRandom() {
+            const optionsList = document.getElementById("optionsList");
+            const options = Array.from(optionsList.children);
+
+            if (options.length === 0) {
+                alert("No quedan opciones para seleccionar.");
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * options.length);
+            const selectedOption = options[randomIndex];
+
+            document.getElementById("result").textContent = `Seleccionado: ${selectedOption.textContent}`;
+
+            // Ocultar las opciones restantes
+            optionsList.classList.add("hidden");
+
+            // Mostrar nuevamente las opciones después de un tiempo
+            setTimeout(() => {
+                optionsList.classList.remove("hidden");
+                optionsList.removeChild(selectedOption);
+            }, 1000); // Opciones se vuelven a mostrar después de 1 segundo
+        }
+
+        document.getElementById("options").addEventListener("input", initializeOptions);
+    </script>
+</body>
+</html>
